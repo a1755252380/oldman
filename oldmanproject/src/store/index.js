@@ -5,8 +5,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    index: {
+      // 侧边栏默认打开的选项
+      sideopen: '/index'
+    }
   },
   mutations: {
+    setsideopen (state, value) {
+      state.index.sideopen = value
+    }
+  },
+  getters: {
+    getsideopen (state) {
+      return state.index.sideopen
+    }
   },
   actions: {
   },
