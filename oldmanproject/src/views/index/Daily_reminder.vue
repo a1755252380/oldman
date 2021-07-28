@@ -1,15 +1,17 @@
 <template>
-  <el-row :gutter="0"
-          class="DailyreminderVue_body">
-    <el-col :span="12">
-      <EventVue></EventVue>
-    </el-col>
-    <el-col :span="12"
-            style="background:#5D62A2; border-radius: 30px;height:100%">
-      <clendar></clendar>
-    </el-col>
-  </el-row>
-
+  <div>
+    <el-row :gutter="0"
+            class="DailyreminderVue_body">
+      <el-col :span="14"
+              style="height:100%">
+        <EventVue></EventVue>
+      </el-col>
+      <el-col :span="10"
+              style="background:#5D62A2; border-radius: 30px;height:100%">
+        <clendar></clendar>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <script>
 
