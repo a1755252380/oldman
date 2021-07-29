@@ -41,8 +41,64 @@
     <el-col :span="5"
             style="height:100%"
             class="zhushoubody">
-      <p class="wenzi_microphone">hi，我是语音助手</p>
-      <button class="btn_microphone button2 b-pink rot-135"><i class="el-icon-microphone"></i></button>
+      <p class="wenzi_microphone"
+         v-show="titleshow">hi，我是语音助手</p>
+      <div class="talk"
+           v-show="!titleshow">
+        <div id="Chat_interface">
+
+        </div>
+      </div>
+      <button class="btn_microphone button2 b-pink rot-135">
+        <svg v-show="!iconshow"
+             class="pl"
+             width="240"
+             height="240"
+             viewBox="0 0 240 240">
+          <circle class="pl__ring pl__ring--a"
+                  cx="120"
+                  cy="120"
+                  r="105"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="20"
+                  stroke-dasharray="0 660"
+                  stroke-dashoffset="-330"
+                  stroke-linecap="round" />
+          <circle class="pl__ring pl__ring--b"
+                  cx="120"
+                  cy="120"
+                  r="35"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="20"
+                  stroke-dasharray="0 220"
+                  stroke-dashoffset="-110"
+                  stroke-linecap="round" />
+          <circle class="pl__ring pl__ring--c"
+                  cx="85"
+                  cy="120"
+                  r="70"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="20"
+                  stroke-dasharray="0 440"
+                  stroke-linecap="round" />
+          <circle class="pl__ring pl__ring--d"
+                  cx="155"
+                  cy="120"
+                  r="70"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="20"
+                  stroke-dasharray="0 440"
+                  stroke-linecap="round" />
+        </svg>
+
+        <i class="el-icon-microphone"
+           v-show="iconshow"
+           @click="btnclick"></i>
+      </button>
     </el-col>
   </el-row>
 
@@ -50,17 +106,42 @@
 <script>
 import DailyreminderVue from './index/Daily_reminder.vue'
 import DailyfootVue from './index/Daily_reminder_foot/Dailyfoot.vue'
-
+import { answer, Question } from "../assets/js/index"
 export default {
   data () {
     return {
       searchinput: '',
-      searchshow: false
+      searchshow: false,
+      titleshow: true,
+      iconshow: true
     }
   },
   methods: {
     changsearch () {
       this.searchshow = !this.searchshow
+    },
+
+    //语音助手点击
+    btnclick () {
+      this.titleshow = false
+      this.iconshow = false
+
+      this.$forceUpdate();
+      let s1 = setInterval(() => {
+        Question("你好！")
+        clearInterval(s1)
+        this.iconshow = true
+        let s2 = setInterval(() => {
+
+          answer("你好！")
+          this.$forceUpdate();
+
+          clearInterval(s2)
+        }, 2000);
+      }, 2000);
+
+
+
     }
   },
   components: {
@@ -70,6 +151,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import url("../assets/css/index.css");
 .index_body {
   border-top-left-radius: 40px;
   border-bottom-left-radius: 40px;
@@ -117,6 +199,13 @@ export default {
 }
 
 //语音助手
+
+//聊天界面
+.talk {
+  height: 70%;
+  // background: red;
+  overflow: auto;
+}
 .wenzi_microphone {
   margin: 50% auto;
   font-size: 25px;
@@ -131,7 +220,7 @@ export default {
   width: 70px;
   height: 70px;
   position: absolute;
-  bottom: 18%;
+  bottom: 13%;
   transition: all 0.9s;
   filter: hue-rotate(0deg);
   animation: ripple 0.9s linear infinite;

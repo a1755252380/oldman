@@ -81,7 +81,9 @@ export default {
       cardheight: '',
 
       //提醒弹窗
-      checked: true,
+      checked: false,
+
+
 
       //事件数据
       daydata: [{
@@ -129,8 +131,8 @@ export default {
   mounted () {
     var height = parseInt(this.$refs.event.offsetHeight) - parseInt(this.$refs.event_title.offsetHeight) - parseInt(this.$refs.choose_btn_list.offsetHeight) - 200
     this.cardheight = height + 'px'
-    console.log(this.cardheight)
-    console.log(parseInt(this.$refs.event_title.offsetHeight))
+    // console.log(this.cardheight)
+    // console.log(parseInt(this.$refs.event_title.offsetHeight))
   }
 }
 </script>
