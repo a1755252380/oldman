@@ -1,82 +1,97 @@
 <template>
-  <el-row :gutter="0"
-          class="Dailygoot_body">
+  <div>
+    <el-row :gutter="0"
+            class="Dailygoot_body">
 
-    <el-col :span="7"
-            class="Dailygoot_tag">
-      <el-row :gutter="0"
-              class="Dailygoot_tag_wenzi">
-        <el-col :span="6">
-          <el-image class="icon"
-                    :src="icon[0].icon"></el-image>
+      <el-col :span="7"
+              class="Dailygoot_tag">
+        <el-row :gutter="0"
+                class="Dailygoot_tag_wenzi">
+          <el-col :span="6">
+            <el-image class="icon"
+                      :src="icon[0].icon"></el-image>
 
-        </el-col>
-        <el-col :span="18">
-          <p class="reminder_english">Disease to remind</p>
-          <div class="reminder">用药提醒
+          </el-col>
+          <el-col :span="18">
+            <p class="reminder_english">Disease to remind</p>
+            <div class="reminder">用药提醒
 
-            <el-button class="reminder_btn"
-                       size="mini"
-                       circle>
-              <i class="el-icon-plus reminder_btn_i"></i>
-            </el-button>
-          </div>
-          <p class="reminder_wenzi">最近+0提现继续保持下去哦</p>
-        </el-col>
+              <el-button class="reminder_btn"
+                         size="mini"
+                         circle
+                         @click="addMedication()">
+                <i class="el-icon-plus reminder_btn_i"></i>
+              </el-button>
+            </div>
+            <p class="reminder_wenzi">最近+0提现继续保持下去哦</p>
+          </el-col>
 
-      </el-row>
-    </el-col>
-    <el-col :span="1">&nbsp;</el-col>
-    <el-col :span="7"
-            class="Dailygoot_tag">
-      <el-row :gutter="0"
-              class="Dailygoot_tag_wenzi">
-        <el-col :span="6">
-          <el-image class="icon"
-                    :src="icon[1].icon"
-                    style="background:#CFF8F9"></el-image>
+        </el-row>
+      </el-col>
+      <el-col :span="1">&nbsp;</el-col>
+      <el-col :span="7"
+              class="Dailygoot_tag">
+        <el-row :gutter="0"
+                class="Dailygoot_tag_wenzi">
+          <el-col :span="6">
+            <el-image class="icon"
+                      :src="icon[1].icon"
+                      style="background:#CFF8F9"></el-image>
 
-        </el-col>
-        <el-col :span="18">
-          <p class="reminder_english">Life remind</p>
-          <div class="reminder">生活提醒
+          </el-col>
+          <el-col :span="18">
+            <p class="reminder_english">Life remind</p>
+            <div class="reminder">生活提醒
 
-          </div>
-          <p class="reminder_wenzi">+12</p>
-        </el-col>
+            </div>
+            <p class="reminder_wenzi">+12</p>
+          </el-col>
 
-      </el-row>
-    </el-col>
-    <el-col :span="1">&nbsp;</el-col>
-    <el-col :span="7"
-            class="Dailygoot_tag">
-      <el-row :gutter="0"
-              class="Dailygoot_tag_wenzi">
-        <el-col :span="6">
-          <el-image class="icon"
-                    style="background:#FFEDD3"
-                    :src="icon[2].icon"></el-image>
+        </el-row>
+      </el-col>
+      <el-col :span="1">&nbsp;</el-col>
+      <el-col :span="7"
+              class="Dailygoot_tag">
+        <el-row :gutter="0"
+                class="Dailygoot_tag_wenzi">
+          <el-col :span="6">
+            <el-image class="icon"
+                      style="background:#FFEDD3"
+                      :src="icon[2].icon"></el-image>
 
-        </el-col>
-        <el-col :span="18">
-          <p class="reminder_english">custom remind</p>
-          <div class="reminder">自定义提醒
+          </el-col>
+          <el-col :span="18">
+            <p class="reminder_english">custom remind</p>
+            <div class="reminder">自定义提醒
 
-            <el-button class="reminder_btn"
-                       size="mini"
-                       circle>
-              <i class="el-icon-plus reminder_btn_i"></i>
-            </el-button>
-          </div>
-          <p class="reminder_wenzi">最近+0提现继续保持下去哦</p>
-        </el-col>
+              <el-button class="reminder_btn"
+                         size="mini"
+                         @click="addCustom"
+                         circle>
+                <i class="el-icon-plus reminder_btn_i"></i>
+              </el-button>
+            </div>
+            <p class="reminder_wenzi">最近+0提现继续保持下去哦</p>
+          </el-col>
 
-      </el-row>
-    </el-col>
-  </el-row>
+        </el-row>
+      </el-col>
+    </el-row>
+    <MedicationVue :Medication="Medication"
+                   @getMedication="getMedication"></MedicationVue>
+    <CustomVue :Custom="Custom"
+               @getCustom="getCustom"></CustomVue>
+  </div>
 </template>
 <script>
+import CustomVue from './Dialog/Custom.vue'
+import MedicationVue from './Dialog/Medication.vue'
+
 export default {
+  components: {
+    MedicationVue,
+    CustomVue
+  },
   data () {
     return {
       icon: [{
@@ -85,9 +100,38 @@ export default {
         icon: require('../../../assets/img/icon/remind2.png')
       }, {
         icon: require('../../../assets/img/icon/remind3.png')
-      }]
+      }],
+
+      //添加用药提醒
+      Medication: false,
+
+      //添加自定义提醒
+      Custom: false,
+
     }
   },
+  methods: {
+
+    //添加用药
+    addMedication () {
+      this.Medication = true
+    },
+
+    //添加自定义提醒
+    addCustom () {
+      this.Custom = true
+    },
+
+    //接收弹窗状态
+    getMedication (value) {
+      this.Medication = value
+    },
+
+    //接收自定义提醒弹窗状态
+    getCustom (value) {
+      this.Custom = value
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
