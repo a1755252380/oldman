@@ -1,0 +1,146 @@
+<template>
+  <div style="" class="camera_body">
+    <el-row :gutter="10" style="padding: 25px; position: relative">
+      <el-col :span="18">
+        <img :src="Camera_img" alt="" style="width: 100%" class="Camera_img" />
+        <div style="" class="Operation_div">
+          <div class="btn_div">
+            <el-button type="" class="begin_btn" @click="openIdentify">开始识别</el-button>
+            <el-button type="" class="end_btn" @click="closeIdentify">结束识别</el-button>
+          </div>
+
+          <div class="check_div">
+            <el-checkbox v-model="Frame" class="check_choose" @change="showFrame">显示边框</el-checkbox>
+            <el-checkbox v-model="Dimension" class="check_choose" @change="showDimension">显标标注</el-checkbox>
+          </div>
+        </div>
+        <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
+          图像识别
+        </h4>
+        <recognitionVue style="height:30%"></recognitionVue>
+      </el-col>
+      <el-col :span="6" style="height:100%">
+          <IdentifymodeVue></IdentifymodeVue>
+          <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
+          识别时间
+        </h4>
+        <IdentifyresultVue style="height：30%" ></IdentifyresultVue>
+        <CameraMasterVue style="height：30%"></CameraMasterVue>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+<script>
+import CameraMasterVue from './CameraMaster.vue'
+
+import IdentifymodeVue from './Identifymode.vue'
+import IdentifyresultVue from './Identifyresult.vue'
+import recognitionVue from './recognition.vue'
+
+
+export default {
+  data() {
+    return {
+        
+
+      Camera_img: require("../../assets/img/a.jpg"),
+      Dimension: false,
+      Frame: false
+    }
+  },
+  methods: {
+      //开启识别 type算法类型识别
+      openIdentify(type){
+          console.log("开启识别！！"+type)
+      },
+      closeIdentify(){
+          console.log("关闭识别")
+      },
+
+      //显示边框
+      showFrame(){
+          if(this.Frame){
+              console.log("显示边框")
+          }else{
+                console.log("关闭显示边框")
+          }
+          
+      },
+        //显示标注
+       showDimension(){
+           if(this.Dimension){console.log("显示标注！！")}else{console.log("显关闭示标注！！")}
+           
+       }, 
+  },
+  Mount() {
+     
+  },
+  components:{
+      recognitionVue,
+      IdentifymodeVue,
+      IdentifyresultVue,
+      CameraMasterVue
+  }
+}
+</script>
+<style lang="scss" scoped>
+.camera_body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .Camera_img {
+    border-radius: 15px;
+    height: 494px;
+  }
+
+  //图片展示操作按钮
+  .Operation_div {
+    width: 100%;
+
+    display: block;
+    margin: 10px 0;
+    .btn_div {
+      display: inline-block;
+      position: relative;
+      left: 0;
+      .begin_btn {
+        background: #be357c;
+        border-color: #be357c;
+        border-radius: 10px;
+        color: #fff;
+        height: 50px;
+        width: 170px;
+      }
+      .begin_btn:hover {
+        background: #5d62a2;
+        border-color: #5d62a2;
+      }
+      .end_btn {
+        background: #fff;
+        color: #be357c;
+        border-color: #be357c;
+        border-radius: 10px;
+        height: 50px;
+        width: 170px;
+      }
+      .end_btn:hover {
+        background: #5d62a2;
+        border-color: #5d62a2;
+        color: #fff;
+      }
+    }
+    .check_div {
+      display: inline-block;
+      float: right;
+      text-align: center;
+      padding-top: 13px;
+      .check_choose {
+        color: #a9acce;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+</style>

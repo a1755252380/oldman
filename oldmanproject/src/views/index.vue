@@ -5,37 +5,7 @@
     <el-col :span="19"
             style="height:100%">
       <div class="projectbody">
-        <div style=" padding: 30px 30px 10px 30px">
-          <el-input placeholder="请输入内容"
-                    v-model="searchinput"
-                    class="input-with-select"
-                    v-if="searchshow">
-
-            <el-button type="primary"
-                       slot="append"
-                       icon="el-icon-search"></el-button>
-            <el-button type="primary"
-                       slot="append"
-                       icon="el-icon-close"
-                       @click="changsearch"></el-button>
-
-          </el-input>
-          <div v-else>
-            <el-button type="text"
-                       @click="changsearch"><i class="el-icon-search"></i></el-button>
-            <span class="tag">aaa</span>
-
-          </div>
-
-          <p class="title">早上好！小明，新的一天又开始了</p>
-        </div>
-        <div class="mode2">
-          <DailyreminderVue></DailyreminderVue>
-        </div>
-        <div class="mode3">
-          <DailyfootVue></DailyfootVue>
-        </div>
-
+        <CameraVue></CameraVue>
       </div>
     </el-col>
     <el-col :span="5"
@@ -104,23 +74,19 @@
 
 </template>
 <script>
-import DailyreminderVue from './index/Daily_reminder.vue'
-import DailyfootVue from './index/Daily_reminder_foot/Dailyfoot.vue'
+
 import { answer, Question } from "../assets/js/index"
+import CameraVue from './index/Camera.vue'
 export default {
   data () {
     return {
-      searchinput: '',
-      searchshow: false,
+      
       titleshow: true,
       iconshow: true
     }
   },
   methods: {
-    changsearch () {
-      this.searchshow = !this.searchshow
-    },
-
+    
     //语音助手点击
     btnclick () {
       this.titleshow = false
@@ -145,19 +111,20 @@ export default {
     }
   },
   components: {
-    DailyreminderVue,
-    DailyfootVue
+CameraVue
   }
 }
 </script>
 <style lang="scss" scoped>
 @import url("../assets/css/index.css");
 .index_body {
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   background: #161925;
+ 
   height: 100%;
   border: none;
+  overflow-y: hidden;
 }
 .zhushoubody {
   position: relative;
@@ -167,8 +134,10 @@ export default {
 }
 .projectbody {
   height: 100%;
-  background-color: #f5f6fb;
-  border-radius: 37px;
+  border-color: #F5F6FB;
+  background-color: #F5F6FB;
+  border-radius: 30px;
+  z-index: 88;
 }
 
 .mode2 {
