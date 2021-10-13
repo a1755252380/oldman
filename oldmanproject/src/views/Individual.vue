@@ -1,4 +1,3 @@
-
 <template>
   <el-row
     :gutter="0"
@@ -9,7 +8,6 @@
       style="height:100%"
     >
       <div class="projectbody">
-        <CameraVue></CameraVue>
       </div>
     </el-col>
     <el-col
@@ -20,29 +18,11 @@
       <voiceVue></voiceVue>
     </el-col>
   </el-row>
-
 </template>
 <script>
-
-
-import CameraVue from './index/Camera.vue'
 import voiceVue from './index/voice.vue'
 export default {
-  data () {
-    return {
-
-
-
-
-    }
-  },
-
-  methods: {
-
-
-  },
   components: {
-    CameraVue,
     voiceVue
   }
 }
@@ -69,13 +49,5 @@ export default {
   background-color: #f5f6fb;
   border-radius: 30px;
   z-index: 88;
-}
-
-.mode2 {
-  height: 60%;
-}
-.mode3 {
-  margin-top: 20px;
-  height: 13%;
 }
 </style>

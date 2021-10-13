@@ -1,24 +1,25 @@
 <template>
   <el-aside style="position:relativ;max-width:200px;width:12%">
-    <el-menu class="el-menu-vertical-demo"
-             :router="true"
-             :default-active="openindex"
-             @select="handleOpen">
+    <el-menu
+      class="el-menu-vertical-demo"
+      :router="true"
+      :default-active="openindex"
+      @select="handleOpen"
+    >
 
       <el-menu-item index="/index">
 
         首页
-        <div id="sideopen"
-             style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; background: rgb(245, 246, 251); position: absolute; right: 0px; display: inline-block; width: 30px; height: 100%;">&lt;</div>
+        <div
+          id="sideopen"
+          style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; background: rgb(245, 246, 251); position: absolute; right: 0px; display: inline-block; width: 30px; height: 100%;"
+        >&lt;</div>
       </el-menu-item>
       <el-menu-item index="/talk">
 
         聊天
       </el-menu-item>
-      <el-menu-item index="/Identify">
 
-        识别
-      </el-menu-item>
       <el-menu-item index="/Individual">
         个人
       </el-menu-item>
