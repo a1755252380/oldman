@@ -96,8 +96,8 @@ export default {
       voiceWebSocket: null,
       //判断是否有麦克风权限
       get: true,
-      talkquestion: "",
-      ralkanswer: "",
+      talkquestion: " ",
+      talkanswer: " ",
     };
   },
   created () {
@@ -145,22 +145,14 @@ export default {
 
       if (this.get) {
         this.voiceWebSocket.onmessage = this.voiceimgonmessage
-        setTimeout(() => {
-          Question(this.Question)
-        }, 500);
-
-        setTimeout(() => {
-          answer(this.answer)
-        }, 1000);
-
-        this.$forceUpdate();
+             var ele = document.getElementById('talk');
+      ele.scrollTop = ele.scrollHeight;
       } else {
         return
       }
       //     clearInterval(s2)
       //   }, 2000);
-      var ele = document.getElementById('talk');
-      ele.scrollTop = ele.scrollHeight;
+
     },
 
     // 开始录音
@@ -208,7 +200,7 @@ export default {
       reader.onload = (e) => {
         if (callback) {
           this.voiceWebSocket.send(0)
-          console.log(e.target.result)
+          // console.log(e.target.result)
           this.voiceWebSocket.send(e.target.result)
 
           callback(e.target.result)
@@ -227,11 +219,29 @@ export default {
 
     },
     voiceimgonmessage (data) {
+      
+      let data1 = JSON.parse(data.data);
       console.log('收到消息----------');
-      console.log(data.data)
+      console.log(data1.recon_txt)
+      this.talkquestion = data1.recon_txt
+      this.talkanswer = data1.ret_answer
+       
+          if(this.talkquestion===""){
+            Question("...")
+          }else{
+            console.log(this.talkquestion)
+             Question(this.talkquestion)
+             this.talkquestion=""
+          }
+         
+       
 
-      this.Question = data.data['recon_txt'];
-      this.answer = data.data['ret_answer']
+        setTimeout(() => {
+          answer(this.talkanswer)
+          this.talkanswer=""
+        }, 500);
+
+        this.$forceUpdate();
       return;
     }
 
