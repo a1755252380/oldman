@@ -2,3 +2,4 @@ Camera.vue   摄像头识别模块
 recognition.vue  图像识别模块
 Identifymode.vue  算法选择模块
 Identifyresult.vue   算法识别模块
+voice.vue  语音对话模块 通过webstork通信
