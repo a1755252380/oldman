@@ -181,8 +181,8 @@ export default {
       const newbolb = new Blob([blob], { type: 'audio/wav' })
 
       const fileOfBlob = new File([newbolb], new Date().getTime() + '.wav')
-      this.blobToBase64(newbolb, function (result) {    //blob格式再转换为base64格式
-        // console.log(result)
+      this.blobToBase64(blob, function (result) {    //blob格式再转换为base64格式
+        console.log(result)
 
       })
 
