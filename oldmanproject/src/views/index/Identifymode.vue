@@ -130,4 +130,15 @@ export default {
     border-radius: 10px;
   }
 }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .p1 {
+    display: none;
+  }
+  .p2 {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+}
+@import url("../../assets/css/idebtifymodde.css");
 </style>

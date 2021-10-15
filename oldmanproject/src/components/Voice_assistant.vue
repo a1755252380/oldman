@@ -73,7 +73,7 @@ export default {
     }
   },
   created () {
-    this.recorder = new Recorder()
+    this.recorder = new Recorder({ sampleRate: 16000, bitRate: 16 })
   },
   methods: {
     // 开始录音
@@ -165,7 +165,8 @@ export default {
       const formData = new FormData()
       const blob = this.recorder.getWAVBlob()// 获取wav格式音频数据
       // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
-      const newbolb = new Blob([blob], { type: 'audio/wav' })
+      this.recorder.downloadWAV("b")
+      const newbolb = new Blob(blob, { type: 'audio/wav' })
       const fileOfBlob = new File([newbolb], new Date().getTime() + '.wav')
       formData.append('file', fileOfBlob)
       const url = window.URL.createObjectURL(fileOfBlob)

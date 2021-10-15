@@ -83,7 +83,7 @@
 <script>
 
 import { answer, Question } from "../../assets/js/index"
-import Recorder from 'js-audio-recorder'
+import "https://cdn.jsdelivr.net/gh/xiangyuecn/Recorder@latest/src/recorder-core.js"
 export default {
   data () {
     return {
@@ -101,7 +101,14 @@ export default {
     };
   },
   created () {
-    this.recorder = new Recorder()
+
+    this.recorder = new Recorder({
+      sampleBits: 16,                 // 采样位数，支持 8 或 16，默认是16
+      sampleRate: 16000,              // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
+      numChannels: 1,                 // 声道，支持 1 或 2， 默认是1
+      compiling: false,//(0.x版本中生效, 1.x增加中)  // 是否边录边转换，默认是false
+    });
+
   },
   mounted () {
     if ('WebSocket' in window) {
@@ -145,8 +152,8 @@ export default {
 
       if (this.get) {
         this.voiceWebSocket.onmessage = this.voiceimgonmessage
-             var ele = document.getElementById('talk');
-      ele.scrollTop = ele.scrollHeight;
+        var ele = document.getElementById('talk');
+        ele.scrollTop = ele.scrollHeight;
       } else {
         return
       }
@@ -157,8 +164,8 @@ export default {
 
     // 开始录音
     handleStart () {
-      this.recorder = new Recorder()
-      Recorder.getPermission().then(() => {
+
+      this.recorder.getPermission().then(() => {
         console.log('开始录音')
         this.recorder.start() // 开始录音
       }, (error) => {
@@ -173,18 +180,23 @@ export default {
     },
     handlePause () {
       console.log('暂停录音')
-      this.recorder.stop() // 暂停录音
+      this.recorder.pause() // 暂停录音
       const blob = this.recorder.getWAVBlob()// 获取wav格式音频数据
       // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
 
-
+      this.recorder.downloadWAV("a")
       const newbolb = new Blob([blob], { type: 'audio/wav' })
 
       const fileOfBlob = new File([newbolb], new Date().getTime() + '.wav')
-      this.blobToBase64(blob, function (result) {    //blob格式再转换为base64格式
-        console.log(result)
+      let reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = () => {
+        this.voiceWebSocket.send(0)
+        // console.log(e.target.result)
+        this.voiceWebSocket.send(reader.result)
+      }
 
-      })
+
 
     },
     //结束识别
@@ -195,21 +207,7 @@ export default {
       }
 
     },
-    blobToBase64 (blob_data, callback) {
-      let reader = new FileReader()
-      reader.onload = (e) => {
-        if (callback) {
-          this.voiceWebSocket.send(0)
-          // console.log(e.target.result)
-          this.voiceWebSocket.send(e.target.result)
 
-          callback(e.target.result)
-        }
-      }
-      reader.readAsDataURL(blob_data)
-
-
-    },
     //开始识别
     voicegetImg (fileOfBlob) {
       console.log("开始通信");
@@ -219,29 +217,29 @@ export default {
 
     },
     voiceimgonmessage (data) {
-      
+
       let data1 = JSON.parse(data.data);
       console.log('收到消息----------');
       console.log(data1.recon_txt)
       this.talkquestion = data1.recon_txt
       this.talkanswer = data1.ret_answer
-       
-          if(this.talkquestion===""){
-            Question("...")
-          }else{
-            console.log(this.talkquestion)
-             Question(this.talkquestion)
-             this.talkquestion=""
-          }
-         
-       
 
-        setTimeout(() => {
-          answer(this.talkanswer)
-          this.talkanswer=""
-        }, 500);
+      if (this.talkquestion === "") {
+        Question("...")
+      } else {
+        console.log(this.talkquestion)
+        Question(this.talkquestion)
+        this.talkquestion = ""
+      }
 
-        this.$forceUpdate();
+
+
+      setTimeout(() => {
+        answer(this.talkanswer)
+        this.talkanswer = ""
+      }, 500);
+
+      this.$forceUpdate();
       return;
     }
 

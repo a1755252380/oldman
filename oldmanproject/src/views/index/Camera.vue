@@ -1,17 +1,47 @@
 <template>
-  <div style="" class="camera_body">
-    <el-row :gutter="10" style="padding: 25px; position: relative">
+  <div
+    style=""
+    class="camera_body"
+  >
+    <el-row
+      :gutter="10"
+      style="padding: 25px; position: relative"
+    >
       <el-col :span="18">
-        <img :src="Camera_img" alt="" style="width: 100%" class="Camera_img" />
-        <div style="" class="Operation_div">
+        <img
+          :src="Camera_img"
+          alt=""
+          style="width: 100%"
+          class="Camera_img"
+        />
+        <div
+          style=""
+          class="Operation_div"
+        >
           <div class="btn_div">
-            <el-button type="" class="begin_btn" @click="openIdentify">开始识别</el-button>
-            <el-button type="" class="end_btn" @click="closeIdentify">结束识别</el-button>
+            <el-button
+              type=""
+              class="begin_btn"
+              @click="openIdentify"
+            >开始识别</el-button>
+            <el-button
+              type=""
+              class="end_btn"
+              @click="closeIdentify"
+            >结束识别</el-button>
           </div>
 
           <div class="check_div">
-            <el-checkbox v-model="Frame" class="check_choose" @change="showFrame">显示边框</el-checkbox>
-            <el-checkbox v-model="Dimension" class="check_choose" @change="showDimension">显标标注</el-checkbox>
+            <el-checkbox
+              v-model="Frame"
+              class="check_choose"
+              @change="showFrame"
+            >显示边框</el-checkbox>
+            <el-checkbox
+              v-model="Dimension"
+              class="check_choose"
+              @change="showDimension"
+            >显标标注</el-checkbox>
           </div>
         </div>
         <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
@@ -19,12 +49,15 @@
         </h4>
         <recognitionVue style="height:30%"></recognitionVue>
       </el-col>
-      <el-col :span="6" style="height:100%">
-          <IdentifymodeVue></IdentifymodeVue>
-          <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
+      <el-col
+        :span="6"
+        style="height:100%"
+      >
+        <IdentifymodeVue></IdentifymodeVue>
+        <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
           识别时间
         </h4>
-        <IdentifyresultVue style="height：30%" ></IdentifyresultVue>
+        <IdentifyresultVue style="height：30%"></IdentifyresultVue>
         <CameraMasterVue style="height：30%"></CameraMasterVue>
       </el-col>
     </el-row>
@@ -39,9 +72,9 @@ import recognitionVue from './recognition.vue'
 
 
 export default {
-  data() {
+  data () {
     return {
-        
+
 
       Camera_img: require("../../assets/img/a.jpg"),
       Dimension: false,
@@ -49,37 +82,37 @@ export default {
     }
   },
   methods: {
-      //开启识别 type算法类型识别
-      openIdentify(type){
-          console.log("开启识别！！"+type)
-      },
-      closeIdentify(){
-          console.log("关闭识别")
-      },
+    //开启识别 type算法类型识别
+    openIdentify (type) {
+      console.log("开启识别！！" + type)
+    },
+    closeIdentify () {
+      console.log("关闭识别")
+    },
 
-      //显示边框
-      showFrame(){
-          if(this.Frame){
-              console.log("显示边框")
-          }else{
-                console.log("关闭显示边框")
-          }
-          
-      },
-        //显示标注
-       showDimension(){
-           if(this.Dimension){console.log("显示标注！！")}else{console.log("显关闭示标注！！")}
-           
-       }, 
+    //显示边框
+    showFrame () {
+      if (this.Frame) {
+        console.log("显示边框")
+      } else {
+        console.log("关闭显示边框")
+      }
+
+    },
+    //显示标注
+    showDimension () {
+      if (this.Dimension) { console.log("显示标注！！") } else { console.log("显关闭示标注！！") }
+
+    },
   },
-  Mount() {
-     
+  Mount () {
+
   },
-  components:{
-      recognitionVue,
-      IdentifymodeVue,
-      IdentifyresultVue,
-      CameraMasterVue
+  components: {
+    recognitionVue,
+    IdentifymodeVue,
+    IdentifyresultVue,
+    CameraMasterVue
   }
 }
 </script>
@@ -90,7 +123,7 @@ export default {
   position: relative;
   .Camera_img {
     border-radius: 15px;
-    height: 494px;
+    height: 30%;
   }
 
   //图片展示操作按钮
@@ -108,8 +141,7 @@ export default {
         border-color: #be357c;
         border-radius: 10px;
         color: #fff;
-        height: 50px;
-        width: 170px;
+        padding: 15px 40px;
       }
       .begin_btn:hover {
         background: #5d62a2;
@@ -120,8 +152,7 @@ export default {
         color: #be357c;
         border-color: #be357c;
         border-radius: 10px;
-        height: 50px;
-        width: 170px;
+        padding: 15px 40px;
       }
       .end_btn:hover {
         background: #5d62a2;
@@ -141,6 +172,22 @@ export default {
         font-weight: 600;
       }
     }
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  .begin_btn {
+    background: #be357c;
+    border-color: #be357c;
+    border-radius: 10px;
+    color: #fff;
+    padding: 10px 30px;
+  }
+  .end_btn {
+    background: #fff;
+    color: #be357c;
+    border-color: #be357c;
+    border-radius: 10px;
+    padding: 10px 30px;
   }
 }
 </style>

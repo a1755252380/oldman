@@ -95,4 +95,17 @@ li {
     color: #be357c;
   }
 }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .identifyresult {
+    border-radius: 10px;
+    background: #fff;
+    padding: 2px 0;
+    ul {
+      height: 150px;
+
+      padding-inline-start: 5px;
+      overflow-y: auto;
+    }
+  }
+}
 </style>

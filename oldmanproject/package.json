@@ -17,6 +17,8 @@
     "lamejs": "^1.2.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
+    "recorder-js": "^1.0.7",
+    "recorderjs": "^1.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-waterfall2": "^1.10.1",
