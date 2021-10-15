@@ -95,10 +95,18 @@ export default {
       get: true,
       talkquestion: " ",
       talkanswer: " ",
+<<<<<<< Updated upstream
       voiceWebSocket: null
+=======
+
+
+      //base64
+      talkdata:""
+>>>>>>> Stashed changes
     };
   },
   created () {
+
 
     this.rec = Recorder({ //本配置参数请参考下面的文档，有详细介绍
       type: "wav", sampleRate: 16000, bitRate: 16 //mp3格式，指定采样率hz、比特率kbps，其他参数使用默认配置；注意：是数字的参数必须提供数字，不要用字符串；需要使用的type类型，需提前把格式支持文件加载进来，比如使用wav格式需要提前加载wav.js编码引擎
@@ -111,11 +119,21 @@ export default {
 
 
 
-  },
+ },
   mounted () {
     if ('WebSocket' in window) {
+<<<<<<< Updated upstream
       this.voiceWebSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat")
     } else {
+=======
+      this.voiceWebSocket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+    } else {+
+
+
+
+
+
+>>>>>>> Stashed changes
       alert('该浏览器不支持websocket');
     }
 
@@ -175,6 +193,7 @@ export default {
 
     //结束录音 并转码base64格式传递给后台进行语音识别
     handlePause () {
+
       let that = this.rec
       let stock = this.voiceWebSocket
 
@@ -186,6 +205,7 @@ export default {
           // console.log(a.result)
           stock.send(a.result);
         }
+        
 
         // console.log(blob, (window.URL || webkitURL).createObjectURL(blob), "时长:" + duration + "ms");
         that.close();//释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
@@ -199,7 +219,26 @@ export default {
         that.close();//可以通过stop方法的第3个参数来自动调用close
         that = null;
       });
+  
     },
+<<<<<<< Updated upstream
+=======
+    //结束识别
+    voicedestroy () {
+      this.voiceWebSocket.close();
+      this.voiceWebSocket.onclose = function (ev) {
+        console.log('连接关闭');
+      }
+
+    },
+
+   
+
+    //开始识别
+    voicegetImg (fileOfBlob) {
+      console.log("开始通信");
+      this.voiceWebSocket.send(fileOfBlob)
+>>>>>>> Stashed changes
 
 
     voiceimgonmessage (data) {
@@ -212,16 +251,25 @@ export default {
 
       if (this.talkquestion === "") {
         Question("...")
+        let a = document.getElementById('talk');
+                   
+        a.scrollTop = a.scrollHeight;
       } else {
         console.log(this.talkquestion)
         Question(this.talkquestion)
+        let a = document.getElementById('talk');
+                   
+        a.scrollTop = a.scrollHeight;
         this.talkquestion = ""
       }
       setTimeout(() => {
         answer(this.talkanswer)
         this.talkanswer = ""
+         let a = document.getElementById('talk');
+                   
+        a.scrollTop = a.scrollHeight;
       }, 500);
-
+         
       this.$forceUpdate();
       return;
     }
