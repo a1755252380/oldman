@@ -16,23 +16,11 @@
         >场景{{item}}</div>
       </div>
     </el-col>
-    <el-col :span="20">
-      <waterfall
-        class="Scene"
-        :col="col"
-        :width="180"
-        :gutterWidth="gutterWidth"
-        :data="data"
-        @loadmore="loadmore"
-        @scroll="scroll"
-      >
-        <template>
-          <div
-            class="cell-item"
-            v-for="(item,index) in data "
-            :key="index"
-          >
-            <div
+    <el-col :span="20" id="recognition_img" >
+        <el-row :gutter="10" id="recognition_img_div" >
+           <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" :col="6"  v-for="(item,index) in data "
+            :key="index">
+              <div
               :style="{'background':'url('+item.img+') repeat 100% 100%',backgroundSize: '100%'}"
               class="item-img"
             ></div>
@@ -40,33 +28,43 @@
               <div class="item-desc">{{item.time}}</div>
               <div class="item-desc-2">{{item.Behavior}}</div>
             </div>
-          </div>
-        </template>
-      </waterfall>
+            </el-col>
+      </el-row>
+      
+     
     </el-col>
   </el-row>
 </template>
 <script>
+
 const a = { img: require("../../assets/img/a.jpg"), time: "00:00:55", Behavior: "行为正常" };
 export default {
-
+    props:['behavior2'],
   data () {
     return {
       col: 4,
-      data: new Array(16).fill(a),
+      data: new Array(3).fill(a),
       Camera_img: require("../../assets/img/a.jpg"),
       clickindex: 0
     }
   },
+  watch:{
+    behavior2(newvalue){
+      this.data.push(newvalue)
+      
+       this.$forceUpdate();
+    }
+  },
   components: {
   },
+  mounted(){
+    document.getElementById("recognition_img_div").addEventListener("DOMSubtreeModified",function(){
+              document.getElementById("recognition_img_div").scrollTop=document.getElementById("recognition_img_div").scrollHeight
+    },false)
+ 
+  },
   computed: {
-    itemWidth () {
-      return (138 * 0.5 * (document.documentElement.clientWidth / 375))  //rem布局 计算宽度
-    },
-    gutterWidth () {
-      return (9 * 0.5 * (document.documentElement.clientWidth / 375))	//rem布局 计算x轴方向margin(y轴方向的margin自定义在css中即可)
-    }
+    
   },
   methods: {
     //点击切换摄像头场景
@@ -74,20 +72,12 @@ export default {
       this.clickindex = index
     },
 
-    scroll (scrollData) {
-      console.log(scrollData)
-    },
-    switchCol (col) {
-      this.col = col
-      console.log(this.col)
-    },
-    loadmore (index) {
-      this.data = this.data.concat(this.data)
-    }
+  
   }
 }
 </script>
 <style lang="scss" scoped>
+
 .recognition_choose {
   width: 100%;
   height: 40px;
@@ -105,8 +95,8 @@ export default {
 
   color: #fff;
 }
-.Scene {
-  height: 300px;
+#recognition_img_div {
+  height: 200px;
   overflow: auto;
 }
 .item-img {

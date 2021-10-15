@@ -47,7 +47,7 @@
         <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
           图像识别
         </h4>
-        <recognitionVue style="height:30%"></recognitionVue>
+        <recognitionVue :behavior2="behavior2" style="height:30%"></recognitionVue>
       </el-col>
       <el-col
         :span="6"
@@ -57,7 +57,7 @@
         <h4 style="font-weight: bold; font-size: 18px; line-height: 23px; color: #5d62a2">
           识别时间
         </h4>
-        <IdentifyresultVue style="height：30%"></IdentifyresultVue>
+        <IdentifyresultVue :behavior="behavior" style="height：30%"></IdentifyresultVue>
         <CameraMasterVue style="height：30%"></CameraMasterVue>
       </el-col>
     </el-row>
@@ -84,19 +84,30 @@ export default {
       Frame: false,
 
       //camsewebstock
-      camerawebstock: null
+      camerawebstock: null,
+
+
+      //行为识别
+      behavior: { time: "00:00:00", mode: "行为异常", type: 1 },
+      behavior2:{ 
+        img: require("../../assets/img/a.jpg"), 
+        time: "00:00:55", 
+        Behavior: "行为正常" 
+        }
     }
   },
   mounted () {
     if ('WebSocket' in window) {
-      this.camerawebstock = new WebSocket("ws://127.0.0.1:8000/ws/chat")
+      this.camerawebstock = new WebSocket("ws://127.0.0.1:8000/ws/video/wms/")
     } else {
       alert('该浏览器不支持websocket');
     }
-
+ 
     this.camerawebstock.onopen = function (ev) {
       console.log('camerawebstock建立连接');
+    
     }
+   
     this.camerawebstock.onmessage = this.cameraimgonmessage
   },
   destroyed () {
@@ -109,9 +120,21 @@ export default {
     //开启识别 type算法类型识别
     openIdentify (type) {
       console.log("开启识别！！" + type)
+      this.camerawebstock.send("open")
     },
     closeIdentify () {
       console.log("关闭识别")
+      // this.camerawebstock.send("close")
+      this.camerawebstock.close();
+      this.camerawebstock.onclose = function (ev) {
+        console.log('camerawebstock连接关闭');
+    }
+     let close= new WebSocket("ws://127.0.0.1:8000/ws/video/close/")
+     close.onopen = function (ev) {
+      console.log('close建立连接');
+    
+    }
+     close.send("close")
     },
 
     //显示边框
@@ -136,12 +159,22 @@ export default {
     //连接通信
     cameraimgonmessage (data) {
 
-
+      console.log(data.data)
       console.log('收到消息----------');
-
-      this.Camera_img = data.data
+      let data5=JSON.parse(data.data)
+      this.Camera_img = data5.message
+      let mode=""
+      if(data5.type == 1){
+        this.behavior={ time: data5.time, mode:data5.error, type: data5.type },
+      this.behavior2={ 
+        img: data5.message, 
+        time: data5.time, 
+        Behavior: data5.error 
+        }
+      }
+      
+      // console.log(data5)
       this.$forceUpdate();
-      return;
     }
   },
 

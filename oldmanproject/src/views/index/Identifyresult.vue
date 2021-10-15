@@ -1,11 +1,11 @@
 <template>
-  <div class="identifyresult">
-    <ul>
+  <div class="identifyresult" >
+    <ul id="identifyresult">
       <li
         v-for="(item, index) in videdata"
         :key="index"
       >
-        <span class="time">{{ item.time }}</span>&nbsp;&nbsp;<span :class="{ mode: item.type === 1, danger: item.type === 2 }">{{
+        <span class="time">{{ item.time }}</span>&nbsp;&nbsp;<span :class="{ mode: item.type === 0, danger: item.type === 1 }">{{
           item.mode
         }}</span>
       </li>
@@ -15,40 +15,52 @@
 <script>
 
 export default {
-  props: ["innerheight"],
+  props: ["innerheight",'behavior'],
   data () {
     return {
       videdata: [
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 1 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 },
-        { time: "00:00:35", mode: "行为正常", type: 2 }
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 1 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 },
+        // { time: "00:00:35", mode: "行为正常", type: 2 }
       ]
     }
   },
-  mounted () { },
-  computed: {}
+  mounted(){
+      
+    document.getElementById('identifyresult').addEventListener("DOMSubtreeModified", function(){
+    document.getElementById("identifyresult").scrollTop= document.getElementById("identifyresult").scrollHeight
+  }, false)
+  },
+  computed: {
+
+  },
+  watch:{
+    behavior(newvalue){
+      this.videdata.push(newvalue)
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

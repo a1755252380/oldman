@@ -95,14 +95,9 @@ export default {
       get: true,
       talkquestion: " ",
       talkanswer: " ",
-<<<<<<< Updated upstream
+
       voiceWebSocket: null
-=======
 
-
-      //base64
-      talkdata:""
->>>>>>> Stashed changes
     };
   },
   created () {
@@ -122,18 +117,9 @@ export default {
  },
   mounted () {
     if ('WebSocket' in window) {
-<<<<<<< Updated upstream
-      this.voiceWebSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat")
+      this.voiceWebSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat/")
     } else {
-=======
-      this.voiceWebSocket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
-    } else {+
 
-
-
-
-
->>>>>>> Stashed changes
       alert('该浏览器不支持websocket');
     }
 
@@ -221,25 +207,6 @@ export default {
       });
   
     },
-<<<<<<< Updated upstream
-=======
-    //结束识别
-    voicedestroy () {
-      this.voiceWebSocket.close();
-      this.voiceWebSocket.onclose = function (ev) {
-        console.log('连接关闭');
-      }
-
-    },
-
-   
-
-    //开始识别
-    voicegetImg (fileOfBlob) {
-      console.log("开始通信");
-      this.voiceWebSocket.send(fileOfBlob)
->>>>>>> Stashed changes
-
 
     voiceimgonmessage (data) {
 
