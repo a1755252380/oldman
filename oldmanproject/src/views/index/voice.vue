@@ -95,6 +95,7 @@ export default {
       get: true,
       talkquestion: " ",
       talkanswer: " ",
+      voiceWebSocket: null
     };
   },
   created () {
@@ -113,12 +114,13 @@ export default {
   },
   mounted () {
     if ('WebSocket' in window) {
-      this.voiceWebSocket = new WebSocket('ws://127.0.0.1:8000/ws/chat');
+      this.voiceWebSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat")
     } else {
       alert('该浏览器不支持websocket');
     }
+
     this.voiceWebSocket.onopen = function (ev) {
-      console.log('建立连接');
+      console.log('voice建立连接');
     }
 
   },
@@ -171,7 +173,7 @@ export default {
 
     },
 
-
+    //结束录音 并转码base64格式传递给后台进行语音识别
     handlePause () {
       let that = this.rec
       let stock = this.voiceWebSocket
@@ -181,11 +183,11 @@ export default {
         let a = new FileReader();
         a.readAsDataURL(blob);
         a.onload = function () {
-          console.log(a.result)
+          // console.log(a.result)
           stock.send(a.result);
         }
 
-        console.log(blob, (window.URL || webkitURL).createObjectURL(blob), "时长:" + duration + "ms");
+        // console.log(blob, (window.URL || webkitURL).createObjectURL(blob), "时长:" + duration + "ms");
         that.close();//释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
         that = null;
 
@@ -198,23 +200,8 @@ export default {
         that = null;
       });
     },
-    //结束识别
-    voicedestroy () {
-      this.voiceWebSocket.close();
-      this.voiceWebSocket.onclose = function (ev) {
-        console.log('连接关闭');
-      }
-
-    },
-
-    //开始识别
-    voicegetImg (fileOfBlob) {
-      console.log("开始通信");
-      this.voiceWebSocket.send(fileOfBlob)
 
 
-
-    },
     voiceimgonmessage (data) {
 
       let data1 = JSON.parse(data.data);
@@ -230,9 +217,6 @@ export default {
         Question(this.talkquestion)
         this.talkquestion = ""
       }
-
-
-
       setTimeout(() => {
         answer(this.talkanswer)
         this.talkanswer = ""

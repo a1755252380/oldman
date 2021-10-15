@@ -75,10 +75,34 @@ export default {
   data () {
     return {
 
-
+      //主图片数据
       Camera_img: require("../../assets/img/a.jpg"),
+      //是否显示标注
       Dimension: false,
-      Frame: false
+
+      //是否显示边框
+      Frame: false,
+
+      //camsewebstock
+      camerawebstock: null
+    }
+  },
+  mounted () {
+    if ('WebSocket' in window) {
+      this.camerawebstock = new WebSocket("ws://127.0.0.1:8000/ws/chat")
+    } else {
+      alert('该浏览器不支持websocket');
+    }
+
+    this.camerawebstock.onopen = function (ev) {
+      console.log('camerawebstock建立连接');
+    }
+    this.camerawebstock.onmessage = this.cameraimgonmessage
+  },
+  destroyed () {
+    this.camerawebstock.close();
+    this.camerawebstock.onclose = function (ev) {
+      console.log('camerawebstock连接关闭');
     }
   },
   methods: {
@@ -101,13 +125,26 @@ export default {
     },
     //显示标注
     showDimension () {
-      if (this.Dimension) { console.log("显示标注！！") } else { console.log("显关闭示标注！！") }
+      if (this.Dimension) {
+        console.log("显示标注！！")
+      } else {
+        console.log("显关闭示标注！！")
+      }
 
     },
-  },
-  Mount () {
 
+    //连接通信
+    cameraimgonmessage (data) {
+
+
+      console.log('收到消息----------');
+
+      this.Camera_img = data.data
+      this.$forceUpdate();
+      return;
+    }
   },
+
   components: {
     recognitionVue,
     IdentifymodeVue,

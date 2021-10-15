@@ -44,7 +44,14 @@ export default {
   components: {
     CameraVue,
     voiceVue
-  }
+  },
+  mounted () {
+    if ('WebSocket' in window) {
+      // this.$store.commit('setwebstock', new WebSocket('ws://127.0.0.1:8000/ws/chat'));
+    } else {
+      alert('该浏览器不支持websocket');
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>
