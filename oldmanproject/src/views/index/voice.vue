@@ -83,17 +83,14 @@
 <script>
 
 import { answer, Question } from "../../assets/js/index"
-import "https://cdn.jsdelivr.net/gh/xiangyuecn/Recorder@latest/src/recorder-core.js"
+import Recorder from 'recorder-core/recorder.mp3.min'
+import 'recorder-core/src/engine/wav'
 export default {
   data () {
     return {
       titleshow: true,
       iconshow: true,
-      recorder: null,
-      playTime: 0,
-      timer: null,
-      src: null,
-      voiceWebSocket: null,
+      rec: null,
       //判断是否有麦克风权限
       get: true,
       talkquestion: " ",
@@ -102,12 +99,16 @@ export default {
   },
   created () {
 
-    this.recorder = new Recorder({
-      sampleBits: 16,                 // 采样位数，支持 8 或 16，默认是16
-      sampleRate: 16000,              // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
-      numChannels: 1,                 // 声道，支持 1 或 2， 默认是1
-      compiling: false,//(0.x版本中生效, 1.x增加中)  // 是否边录边转换，默认是false
+    this.rec = Recorder({ //本配置参数请参考下面的文档，有详细介绍
+      type: "wav", sampleRate: 16000, bitRate: 16 //mp3格式，指定采样率hz、比特率kbps，其他参数使用默认配置；注意：是数字的参数必须提供数字，不要用字符串；需要使用的type类型，需提前把格式支持文件加载进来，比如使用wav格式需要提前加载wav.js编码引擎
+      , onProcess: function (buffers, powerLevel, bufferDuration, bufferSampleRate, newBufferIdx, asyncEnd) {
+        //录音实时回调，大约1秒调用12次本回调
+        //可利用extensions/waveview.js扩展实时绘制波形
+        //可利用extensions/sonic.js扩展实时变速变调，此扩展计算量巨大，onProcess需要返回true开启异步模式
+      }
     });
+
+
 
   },
   mounted () {
@@ -119,6 +120,7 @@ export default {
     this.voiceWebSocket.onopen = function (ev) {
       console.log('建立连接');
     }
+
   },
   beforeDestroy () {
     this.voiceWebSocket.close();
@@ -133,12 +135,7 @@ export default {
       this.titleshow = false
       this.iconshow = false
 
-      this.$forceUpdate();
-      //   let s1 = setInterval(() => {
-
-      //     clearInterval(s1)
-
-      //   }, 2000);
+      this.$forceUpdate()
 
       this.handleStart()
 
@@ -146,7 +143,7 @@ export default {
     //鼠标松开
     btnout () {
       this.iconshow = true
-      //   let s2 = setInterval(() => {
+
       this.handlePause()
 
 
@@ -157,47 +154,49 @@ export default {
       } else {
         return
       }
-      //     clearInterval(s2)
-      //   }, 2000);
 
     },
 
     // 开始录音
     handleStart () {
+      let that = this.rec
+      this.rec.open(function () {//打开麦克风授权获得相关资源
+        //dialog&&dialog.Cancel(); 如果开启了弹框，此处需要取消
+        that.start() //此处可以立即开始录音，但不建议这样编写，因为open是一个延迟漫长的操作，通过两次用户操作来分别调用open和start是推荐的最佳流程
+        console.log("开始录音了")
+      }, function (msg, isUserNotAllow) {//用户拒绝未授权或不支持
+        //dialog&&dialog.Cancel(); 如果开启了弹框，此处需要取消
+        console.log((isUserNotAllow ? "UserNotAllow，" : "") + "无法录音:" + msg);
+      });
 
-      this.recorder.getPermission().then(() => {
-        console.log('开始录音')
-        this.recorder.start() // 开始录音
-      }, (error) => {
-        this.$message({
-          message: '请先连接麦克风',
-          type: 'info'
-        })
-        this.get = false
-        console.log(`${error.name} : ${error.message}`)
-
-      })
     },
+
+
     handlePause () {
-      console.log('暂停录音')
-      this.recorder.pause() // 暂停录音
-      const blob = this.recorder.getWAVBlob()// 获取wav格式音频数据
-      // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
+      let that = this.rec
+      let stock = this.voiceWebSocket
 
-      this.recorder.downloadWAV("a")
-      const newbolb = new Blob([blob], { type: 'audio/wav' })
+      this.rec.stop(function (blob, duration) {
 
-      const fileOfBlob = new File([newbolb], new Date().getTime() + '.wav')
-      let reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onload = () => {
-        this.voiceWebSocket.send(0)
-        // console.log(e.target.result)
-        this.voiceWebSocket.send(reader.result)
-      }
+        let a = new FileReader();
+        a.readAsDataURL(blob);
+        a.onload = function () {
+          console.log(a.result)
+          stock.send(a.result);
+        }
+
+        console.log(blob, (window.URL || webkitURL).createObjectURL(blob), "时长:" + duration + "ms");
+        that.close();//释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
+        that = null;
+
+        //已经拿到blob文件对象想干嘛就干嘛：立即播放、上传
 
 
-
+      }, function (msg) {
+        console.log("录音失败:" + msg);
+        that.close();//可以通过stop方法的第3个参数来自动调用close
+        that = null;
+      });
     },
     //结束识别
     voicedestroy () {
