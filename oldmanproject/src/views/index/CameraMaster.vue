@@ -7,25 +7,42 @@
       :key="index"
     >{{item}}</span>
 
-    <div class="Master_div">
+    <div
+      class="Master_div"
+      v-loading="loading"
+    >
       <div
-        v-for="(item, index) in 15"
+        v-for="(item, index) in data"
         :key="index"
         :class='{"Master_choose":true,Master_choose_active:choose===index}'
         @click="changechoose(index)"
-      ><i class="el-icon-video-play"></i> 通道{{item}}</div>
+      ><i class="el-icon-video-play"></i> {{item}}</div>
     </div>
   </div>
 </template>
 <script>
 export default {
+
   data () {
     return {
       icon: require('../../assets/img/icon/Vector.png'),
       choose: 0,
       name: ['监控通道', '本地视频'],
-      titleindex: 0
+      titleindex: 0,
+
+      //监控通道数据
+
+      //监控视频数据源
+      Monitordata: ['监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1', '监控1'],
+      //本地视频数据源
+      Localdata: ['本地1', '本地2', '本地3', '本地4', '本地5', '本地6', '本地7'],
+      data: [],
+      //加载
+      loading: false
     };
+  },
+  mounted () {
+    this.data = this.Monitordata
   },
   methods: {
     changechoose (index) {
@@ -34,7 +51,16 @@ export default {
 
     clickmaster (index) {
       console.log(index)
+      this.loading = true
       this.titleindex = index
+      setTimeout(() => {
+        if (index === 0) {
+          this.data = this.Monitordata
+        } else {
+          this.data = this.Localdata
+        }
+        this.loading = false
+      }, 1000);
     }
   },
 }

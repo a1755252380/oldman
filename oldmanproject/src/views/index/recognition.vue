@@ -7,7 +7,10 @@
       :span="4"
       style="height:100%"
     >
-      <div class="Scene">
+      <div
+        class="Scene"
+        :style="{'height':divheight+'px'}"
+      >
         <div
           v-for="(item, index) in 12"
           :key="index"
@@ -16,22 +19,37 @@
         >场景{{item}}</div>
       </div>
     </el-col>
-    <el-col :span="20" id="recognition_img" >
-        <el-row :gutter="10" id="recognition_img_div" >
-           <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" :col="6"  v-for="(item,index) in data "
-            :key="index">
-              <div
-              :style="{'background':'url('+item.img+') repeat 100% 100%',backgroundSize: '100%'}"
-              class="item-img"
-            ></div>
-            <div class="item-body">
-              <div class="item-desc">{{item.time}}</div>
-              <div class="item-desc-2">{{item.Behavior}}</div>
-            </div>
-            </el-col>
+    <el-col
+      :span="20"
+      id="recognition_img"
+      :style="{'height':divheight+'px'}"
+      v-loading="loading"
+    >
+      <el-row
+        :gutter="10"
+        id="recognition_img_div"
+      >
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="12"
+          :lg="6"
+          :xl="6"
+          :col="6"
+          v-for="(item,index) in data "
+          :key="index"
+        >
+          <div
+            :style="{'background':'url('+item.img+') repeat 100% 100%',backgroundSize: '100%'}"
+            class="item-img"
+          ></div>
+          <div class="item-body">
+            <div class="item-desc">{{item.time}}</div>
+            <div class="item-desc-2">{{item.Behavior}}</div>
+          </div>
+        </el-col>
       </el-row>
-      
-     
+
     </el-col>
   </el-row>
 </template>
@@ -39,45 +57,61 @@
 
 const a = { img: require("../../assets/img/a.jpg"), time: "00:00:55", Behavior: "行为正常" };
 export default {
-    props:['behavior2'],
+  props: ['behavior2', "divheight"],
   data () {
     return {
+      divheight2: 0,
       col: 4,
-      data: new Array(3).fill(a),
+      data:
+
+
+        //模拟数据
+        new Array(1).fill(a)
+      ,
+      loading: false,
       Camera_img: require("../../assets/img/a.jpg"),
       clickindex: 0
     }
   },
-  watch:{
-    behavior2(newvalue){
+  watch: {
+    behavior2 (newvalue) {
       this.data.push(newvalue)
-      
-       this.$forceUpdate();
+
+      this.$forceUpdate();
+    },
+    divheight (newvalue) {
+      this.divheight2 = newvalue
     }
   },
   components: {
   },
-  mounted(){
-    document.getElementById("recognition_img_div").addEventListener("DOMSubtreeModified",function(){
-              document.getElementById("recognition_img_div").scrollTop=document.getElementById("recognition_img_div").scrollHeight
-    },false)
- 
+  mounted () {
+    document.getElementById("recognition_img_div").addEventListener("DOMSubtreeModified", function () {
+      document.getElementById("recognition_img_div").scrollTop = document.getElementById("recognition_img_div").scrollHeight
+    }, false)
+
   },
   computed: {
-    
+
   },
   methods: {
     //点击切换摄像头场景
     changerecognition (index) {
       this.clickindex = index
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 1000);
     },
 
-  
+
   }
 }
 </script>
 <style lang="scss" scoped>
-
+.Scene {
+  overflow: scroll;
+}
 .recognition_choose {
   width: 100%;
   height: 40px;
@@ -96,7 +130,6 @@ export default {
   color: #fff;
 }
 #recognition_img_div {
-  height: 200px;
   overflow: auto;
 }
 .item-img {
