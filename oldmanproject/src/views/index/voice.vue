@@ -114,10 +114,10 @@ export default {
 
 
 
- },
+  },
   mounted () {
     if ('WebSocket' in window) {
-      this.voiceWebSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat/")
+      this.voiceWebSocket = new WebSocket("ws://139.159.142.192:8001/ws/chat/speech/")
     } else {
 
       alert('该浏览器不支持websocket');
@@ -191,7 +191,7 @@ export default {
           // console.log(a.result)
           stock.send(a.result);
         }
-        
+
 
         // console.log(blob, (window.URL || webkitURL).createObjectURL(blob), "时长:" + duration + "ms");
         that.close();//释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
@@ -205,7 +205,7 @@ export default {
         that.close();//可以通过stop方法的第3个参数来自动调用close
         that = null;
       });
-  
+
     },
 
     voiceimgonmessage (data) {
@@ -219,24 +219,24 @@ export default {
       if (this.talkquestion === "") {
         Question("...")
         let a = document.getElementById('talk');
-                   
+
         a.scrollTop = a.scrollHeight;
       } else {
         console.log(this.talkquestion)
         Question(this.talkquestion)
         let a = document.getElementById('talk');
-                   
+
         a.scrollTop = a.scrollHeight;
         this.talkquestion = ""
       }
       setTimeout(() => {
         answer(this.talkanswer)
         this.talkanswer = ""
-         let a = document.getElementById('talk');
-                   
+        let a = document.getElementById('talk');
+
         a.scrollTop = a.scrollHeight;
       }, 500);
-         
+
       this.$forceUpdate();
       return;
     }

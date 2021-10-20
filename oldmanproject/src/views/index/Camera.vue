@@ -110,7 +110,7 @@ export default {
   },
   mounted () {
     if ('WebSocket' in window) {
-      this.camerawebstock = new WebSocket("ws://127.0.0.1:8000/ws/video/wms/")
+      this.camerawebstock = new WebSocket("ws://139.159.142.192:8001/ws/video/wms/")
     } else {
       alert('该浏览器不支持websocket');
     }
